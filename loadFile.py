@@ -28,25 +28,30 @@ for folder in os.listdir(rootFolderPath):
 for result in resultList:
     print(result)
 
-# created a empty dataframe to get the output
+
+# created an empty dataframe to get the output
 empty_df = pd.DataFrame()
 
-for file_path in resultList:
-    df = pd.read_csv(file_path)
-    # split file path to get the folder name for rename
-    file_path = file_path.split('\\')
+def getting_only_needed_columns(resultList,empty_df):
+    for file_path in resultList:
+        df = pd.read_csv(file_path)
+        # split file path to get the folder name for rename
+        file_path = file_path.split('\\')
 
-    # rename column using file name
-    df.rename(columns={'train loss': file_path[-2]+'_t'}, inplace=True)
-    df.rename(columns={'val loss': file_path[-2]+'_v'}, inplace=True)
+        # rename column using file name
+        df.rename(columns={'train loss': file_path[-2]+'_t'}, inplace=True)
+        df.rename(columns={'val loss': file_path[-2]+'_v'}, inplace=True)
 
-    # getting only train loss and validation loss columns
-    df = df.iloc[:,[2,4]]
-    # concat the empty list with the inner dataframe to print the output
-    empty_df = pd.concat([empty_df, df], axis=1)
+        # getting only train loss and validation loss columns
+        df = df.iloc[:,[2,4]]
+        # concat the empty list with the inner dataframe to print the output
+        empty_df = pd.concat([empty_df, df], axis=1)
 
+    return empty_df
+
+final_df = getting_only_needed_columns(resultList,empty_df)
 
 print("\n\n******* Final DataFrame *******\n\n")
-print(empty_df.head())
+print(final_df.head())
 
 
